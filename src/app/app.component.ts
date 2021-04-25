@@ -4,6 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-root',
@@ -133,6 +134,10 @@ getAllLinks() {
       Swal.close();
       if (result && result.status == 200) {
         this.displayToast('Links Loaded',false,'success');
+        this.links = result.links;
+        this.dataSource = new MatTableDataSource(this.links);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
       }
       else if (result && result.status == 404) {
         this.displayToast('You have no links',false,'warning');
@@ -152,18 +157,20 @@ addLink(link:String){
   return new Promise((resolve,reject) => {
     this.httpClient.post(environment.url + 'markplats/addlink',{link:link})
     .subscribe((result:any) => {
+      console.log(result);
       if (result && result.status == 200) {
         this.displayToast('Link Created Succesfully',false,'success');
         resolve({status:true});
       }
       else {
         Swal.showValidationMessage(
-          `Request failed: Something Went Wrong`
+          `Request failed: ${result.msg}`
         )
       }
     },err => {
+      console.log(err);
       Swal.showValidationMessage(
-        `Request failed: Something Went Wrong`
+        `Request failed: ${err.msg}`
       )
     })
 

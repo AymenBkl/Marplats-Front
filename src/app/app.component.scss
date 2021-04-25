@@ -25,8 +25,6 @@ mat-form-field {
 
 table {
   width: 100% !important;
-  table-layout: fixed !important;
-
 }
 
 th, td {
@@ -47,48 +45,7 @@ tr.element-row:not(.expanded-row):active {
   background: #efefef;
 }
 
-.element-row td {
-  border-bottom-width: 0;
-}
 
-.element-detail {
-    display: flex;
-    width: 100%;
-    overflow: hidden;
-    text-align: center !important;
-    justify-content: center;
-    height: 83px;
-    align-items: center;
-}
-
-.element-diagram {
-  min-width: 80px;
-  border: 2px solid black;
-  padding: 8px;
-  font-weight: lighter;
-  margin: 8px 0;
-  height: 104px;
-}
-
-.element-symbol {
-  font-weight: bold;
-  font-size: 40px;
-  line-height: normal;
-}
-
-.element-description {
-  padding: 16px;
-}
-
-.element-description-attribution {
-  opacity: 0.5;
-}
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  width: 120px;
-}
 
 .button-row {
   display: table-cell;
