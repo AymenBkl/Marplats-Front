@@ -13,7 +13,7 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class AppComponent implements OnInit {
   links: any[] = [];
-  displayedColumns: string[] = ['link', 'createdAt', 'delete'];
+  displayedColumns: string[] = ['link', 'createdAt','expiration', 'delete'];
   dataSource;
   expandedElement: any;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
