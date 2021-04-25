@@ -16,10 +16,10 @@ export class AppComponent implements OnInit {
   displayedColumns: string[] = ['link', 'createdAt', 'delete'];
   dataSource;
   expandedElement: any;
-  @ViewChild(MatSort,{static:false}) sort: MatSort;
-  @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-  constructor(private httpClient: HttpClient){
+  constructor(private httpClient: HttpClient) {
 
   }
   ngOnInit(): void {
@@ -31,13 +31,13 @@ export class AppComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  displayToast(msg:string,loading:boolean,type:string) {
+  displayToast(msg: string, loading: boolean, type: string) {
     const Toast = Swal.mixin({
       toast: true,
       target: '#custom-target',
       position: 'bottom-start',
       showConfirmButton: false,
-      background:this.handleSnackBar(type),
+      background: this.handleSnackBar(type),
       didOpen: (toast) => {
         if (loading) Swal.showLoading();
 
@@ -54,22 +54,22 @@ export class AppComponent implements OnInit {
     if (!loading) {
       setTimeout(() => {
         Toast.close()
-      },4000);
+      }, 4000);
     }
 
   }
 
   private handleSnackBar(type: string): string {
-    if (type == 'error'){
+    if (type == 'error') {
       return '#d9534f';
     }
-    else if (type == 'success'){
+    else if (type == 'success') {
       return '#5cb85c';
     }
-    else if (type == 'warning'){
+    else if (type == 'warning') {
       return '#f0ad4e';
     }
-    else if (type == 'info'){
+    else if (type == 'info') {
       return '';
     }
     else {
@@ -86,97 +86,161 @@ export class AppComponent implements OnInit {
       backdrop: false,
       allowEscapeKey: false,
       onBeforeOpen: () => {
-          Swal.showLoading()
+        Swal.showLoading()
       },
-  });
-}
+    });
+  }
 
-createInputSwal() {
-  Swal.fire({
-    title: 'Update Link',
-    input: 'text',
-    inputAttributes: {
-      autocapitalize: 'off',
-      placeHolder:'ID OF SHEET'
-    },
-    showCancelButton: true,
-    confirmButtonText: 'Update',
-    showLoaderOnConfirm: true,
-    timer: 1500000,
-    preConfirm: (update) => {
-      return this.addLink(update)
-        .then(() => {
+  createInputSwal() {
+    Swal.fire({
+      title: 'Update Link',
+      input: 'text',
+      inputAttributes: {
+        autocapitalize: 'off',
+        placeHolder: 'ID OF SHEET'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Update',
+      showLoaderOnConfirm: true,
+      timer: 1500000,
+      preConfirm: (update) => {
+        return this.addLink(update)
+          .then(() => {
 
+          })
+          .catch(() => {
+          })
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      console.log(result);
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "LINK ADDED SUCCESFULLY",
+          icon: 'success',
         })
-        .catch(() => {
+      }
+      else if (result.isDismissed) {
+      }
+    })
 
-        })
-    },
-    allowOutsideClick: () => !Swal.isLoading()
-  }).then((result) => {
-    console.log(result);
-    if (result.isConfirmed) {
-      Swal.fire({
-        title:"LINK UPDATED",
-        icon:'success',
-      })
-    }
-    else if (result.isDismissed){
-    }
-  })
+  }
 
-}
-
-getAllLinks() {
-  this.createLoading('Getting All Links Please Wait');
-  this.httpClient.get(environment.url + 'markplats/getlinks')
-    .subscribe((result:any) => {
-      Swal.close();
-      if (result && result.status == 200) {
-        this.displayToast('Links Loaded',false,'success');
-        this.links = result.links;
-        this.dataSource = new MatTableDataSource(this.links);
+  getAllLinks() {
+    this.createLoading('Getting All Links Please Wait');
+    this.httpClient.get(environment.url + 'markplats/getlinks')
+      .subscribe((result: any) => {
+        Swal.close();
+        if (result && result.status == 200) {
+          this.displayToast('Links Loaded', false, 'success');
+          this.links = result.links;
+          this.dataSource = new MatTableDataSource(this.links);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
-      }
-      else if (result && result.status == 404) {
-        this.displayToast('You have no links',false,'warning');
-      }
-      else {
-        this.displayToast('SOMETHING WENT WRONG',false,'error');
+        }
+        else if (result && result.status == 404) {
+          this.displayToast('You have no links', false, 'warning');
+        }
+        else {
+          this.displayToast('SOMETHING WENT WRONG', false, 'error');
 
-      }
-    },err => {
-      Swal.close();
-      this.displayToast('SOMETHING WENT WRONG',false,'error');
+        }
+      }, err => {
+        Swal.close();
+        this.displayToast('SOMETHING WENT WRONG', false, 'error');
+
+      })
+  }
+
+  addLink(link: String) {
+    return new Promise((resolve, reject) => {
+      this.httpClient.post(environment.url + 'markplats/addlink', { link: link })
+        .subscribe((result: any) => {
+          console.log(result);
+          if (result && result.status == 200) {
+            this.links.push(result.link);
+            this.dataSource = new MatTableDataSource(this.links);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+            resolve({ status: true });
+          }
+          else {
+            resolve({ status: false });
+            Swal.showValidationMessage(
+              `Request failed: ${result.msg}`
+            )
+          }
+        }, err => {
+          resolve({ status: false });
+          Swal.showValidationMessage(
+            `Request failed: ${err.msg}`
+          )
+        })
 
     })
-}
+  }
 
-addLink(link:String){
-  return new Promise((resolve,reject) => {
-    this.httpClient.post(environment.url + 'markplats/addlink',{link:link})
-    .subscribe((result:any) => {
-      console.log(result);
-      if (result && result.status == 200) {
-        this.displayToast('Link Created Succesfully',false,'success');
-        resolve({status:true});
+  confirmDeleteLink(linkId: string) {
+
+    let msg = "Are You Sure !";
+    let text = 'Delete Store';
+    let icon = 'warning';
+    let confirmBtn = 'Delete';
+    let cancelBtn = 'Cancel';
+    Swal.fire({
+      title: msg,
+      text: text,
+      icon: icon,
+      showCancelButton: true,
+      confirmButtonText: confirmBtn,
+      cancelButtonText: cancelBtn,
+      showLoaderOnConfirm: true,
+      preConfirm: async () => {
+        return this.deleteLink(linkId)
+          .then((result) => {
+          })
+          .catch(err => {
+          })
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.value || result.isConfirmed) {
+        Swal.fire({
+          title: "STORE DELETED SUCCESFULLY",
+          icon: 'success',
+        })
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
       }
-      else {
-        Swal.showValidationMessage(
-          `Request failed: ${result.msg}`
-        )
-      }
-    },err => {
-      console.log(err);
-      Swal.showValidationMessage(
-        `Request failed: ${err.msg}`
-      )
     })
+  }
 
-  })
+  deleteLink(linkId: string) {
+    return new Promise((resolve, reject) => {
 
+      this.httpClient.put(environment.url + 'markplats/deletelink', { link: linkId })
+        .subscribe((result: any) => {
+          console.log(result);
+          if (result && result.status == 200) {
+            const indexToRemove = this.links.findIndex(link => link.link == linkId);
 
-}
+            this.links.splice(indexToRemove, 1);
+            this.dataSource = new MatTableDataSource(this.links);
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator; resolve({ status: true });
+          }
+          else {
+            resolve({ status: false });
+            Swal.showValidationMessage(
+              `Request failed: ${result.msg}`
+            )
+          }
+        }, err => {
+          resolve({ status: false });
+          Swal.showValidationMessage(
+            `Request failed: ${err.msg}`
+          )
+        })
+    })
+  }
 
 }
