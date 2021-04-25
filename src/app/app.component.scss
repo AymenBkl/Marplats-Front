@@ -1,0 +1,109 @@
+
+.row {
+  background-color: #283136;
+}
+
+.card {
+  background-color: #283136;
+}
+
+.card-title {
+  color:white;
+}
+
+#input {
+  background-color: white;
+}
+
+mat-form-field {
+  width: 80%;
+}
+
+::ng-deep .mat-form-field-flex {
+  background-color: white !important;
+}
+
+table {
+  width: 100% !important;
+  table-layout: fixed !important;
+
+}
+
+th, td {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+tr.detail-row {
+  height: 0;
+}
+
+tr.element-row:not(.expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.element-row:not(.expanded-row):active {
+  background: #efefef;
+}
+
+.element-row td {
+  border-bottom-width: 0;
+}
+
+.element-detail {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    text-align: center !important;
+    justify-content: center;
+    height: 83px;
+    align-items: center;
+}
+
+.element-diagram {
+  min-width: 80px;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  height: 104px;
+}
+
+.element-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.element-description {
+  padding: 16px;
+}
+
+.element-description-attribution {
+  opacity: 0.5;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  width: 120px;
+}
+
+.button-row {
+  display: table-cell;
+  width: 490px;
+}
+
+.button-row .mat-button-base {
+  margin: 8px 8px 8px 0;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+
+
