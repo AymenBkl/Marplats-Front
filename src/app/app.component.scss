@@ -105,5 +105,34 @@ tr.element-row:not(.expanded-row):active {
   flex-wrap: wrap;
 }
 
+.button-bottom{
+  position: absolute;
+  bottom: 40px;
+  right: 30px;
+}
+
+.my-add-fab {
+  width: 60px;
+  height: 60px;
+  line-height:30px;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::ng-deep .mat-button-wrapper{
+      line-height: 30px;
+      padding: 0;
+
+       .mat-icon {
+         display: flex;
+         align-self: center;
+           font-size: 40px;
+           align-items: center;
+           justify-content: center;
+       }
+ }
+}
+
 
 

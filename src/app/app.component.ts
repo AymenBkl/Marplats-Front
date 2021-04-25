@@ -36,7 +36,6 @@ export class AppComponent implements OnInit {
       target: '#custom-target',
       position: 'bottom-start',
       showConfirmButton: false,
-      className: "pos-toast-swt",
       background:this.handleSnackBar(type),
       didOpen: (toast) => {
         if (loading) Swal.showLoading();
