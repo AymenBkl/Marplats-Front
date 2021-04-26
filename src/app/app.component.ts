@@ -15,14 +15,14 @@ import { ExpirationComponent } from './components/expiration/expiration.componen
 })
 export class AppComponent implements OnInit {
   links: any[] = [];
-  displayedColumns: string[] = ['link', 'createdAt', 'expiration', 'delete', 'uexpiration'];
+  displayedColumns: string[] = ['link','storeName', 'createdAt', 'expiration', 'delete', 'uexpiration'];
   dataSource;
   expandedElement: any;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   protected = false;
   constructor(private httpClient: HttpClient,
-              private dialog: MatDialog) {
+    private dialog: MatDialog) {
 
   }
   ngOnInit(): void {
@@ -34,14 +34,14 @@ export class AppComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  password(){
-    let password='123456789';
-    let promptAlert = prompt('Please Enter Your password','Password');
-    if (promptAlert == null || promptAlert != password){
+  password() {
+    let password = '123456789';
+    let promptAlert = prompt('Please Enter Your password', 'Password');
+    if (promptAlert == null || promptAlert != password) {
       this.protected = false;
       this.password();
     }
-    else if (promptAlert != null && promptAlert == password){
+    else if (promptAlert != null && promptAlert == password) {
       this.protected = true;
       this.getAllLinks();
 
@@ -110,18 +110,17 @@ export class AppComponent implements OnInit {
 
   createInputSwal() {
     Swal.fire({
-      title: 'Update Link',
-      input: 'text',
-      inputAttributes: {
-        autocapitalize: 'off',
-        placeHolder: 'ID OF SHEET'
-      },
+      title: 'Add Link',
+      html:
+        '<input id="swal-input1" class="swal2-input" placeHolder="Store Link">' +
+        '<input id="swal-input2" class="swal2-input" placeHolder="Store Name">',
       showCancelButton: true,
+      focusConfirm: false,
       confirmButtonText: 'Update',
       showLoaderOnConfirm: true,
       timer: 1500000,
       preConfirm: (update) => {
-        return this.addLink(update)
+        return this.addLink((<HTMLInputElement>document.getElementById('swal-input1')).value,(<HTMLInputElement>document.getElementById('swal-input2')).value)
           .then(() => {
 
           })
@@ -169,9 +168,10 @@ export class AppComponent implements OnInit {
       })
   }
 
-  addLink(link: String) {
+  addLink(link: string,name:string) {
     return new Promise((resolve, reject) => {
-      this.httpClient.post(environment.url + 'markplats/addlink', { link: link })
+      console.log(link,name);
+      this.httpClient.post(environment.url + 'markplats/addlink', { link: link,name:name })
         .subscribe((result: any) => {
           console.log(result);
           if (result && result.status == 200) {
@@ -231,7 +231,7 @@ export class AppComponent implements OnInit {
     })
   }
 
-  createDateSwal(linkId:string) {
+  createDateSwal(linkId: string) {
     const dialogToOpen = this.dialog.open(ExpirationComponent, {
       width: '50%',
       height: '50%',
@@ -239,7 +239,7 @@ export class AppComponent implements OnInit {
 
     dialogToOpen.afterClosed().subscribe(date => {
       if (date && date != null) {
-        this.updateExpiration(linkId,date);
+        this.updateExpiration(linkId, date);
       }
     })
 
@@ -275,26 +275,26 @@ export class AppComponent implements OnInit {
   }
 
 
-  updateExpiration(linkId: string,newDate:Date) {
-      this.displayToast('Updating Expiration Date',true,'info');
-      this.httpClient.put(environment.url + 'markplats/updatexpiration', { storeId: linkId , date:newDate})
-        .subscribe((result: any) => {
-          Swal.close();
-          console.log(result);
-          if (result && result.status == 200) {
-            this.displayToast('Expiration Date Updated Succesfully',true,'success');
-            const indexToUpdate = this.links.findIndex(link => link._id == linkId);
-            this.links[indexToUpdate] = result.link;
-            this.dataSource = new MatTableDataSource(this.links);
-            this.dataSource.sort = this.sort;
-            this.dataSource.paginator = this.paginator;
-          }
-          else {
-            this.displayToast('Something Went Wrong',true,'error');
-          }
-        }, err => {
-          this.displayToast('Something Went Wrong',true,'error');
-        })
+  updateExpiration(linkId: string, newDate: Date) {
+    this.displayToast('Updating Expiration Date', true, 'info');
+    this.httpClient.put(environment.url + 'markplats/updatexpiration', { storeId: linkId, date: newDate })
+      .subscribe((result: any) => {
+        Swal.close();
+        console.log(result);
+        if (result && result.status == 200) {
+          this.displayToast('Expiration Date Updated Succesfully', true, 'success');
+          const indexToUpdate = this.links.findIndex(link => link._id == linkId);
+          this.links[indexToUpdate] = result.link;
+          this.dataSource = new MatTableDataSource(this.links);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        }
+        else {
+          this.displayToast('Something Went Wrong', true, 'error');
+        }
+      }, err => {
+        this.displayToast('Something Went Wrong', true, 'error');
+      })
   }
 
 }

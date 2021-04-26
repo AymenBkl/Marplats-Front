@@ -13,8 +13,12 @@
           <table class="table" mat-table [dataSource]="dataSource" matSort multiTemplateDataRows
             class="mat-elevation-z8" [hidden]="!(links && links.length > 0)">
             <ng-container matColumnDef="link" >
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-primary"> ID </th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-primary"> Link </th>
               <td mat-cell *matCellDef="let element" matTooltip="{{element.link}}" > {{element.link}} </td>
+            </ng-container>
+            <ng-container matColumnDef="storeName" >
+              <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-primary"> Store Name </th>
+              <td mat-cell *matCellDef="let element" matTooltip="{{element.storeName}}" > {{element.storeName}} </td>
             </ng-container>
             <ng-container matColumnDef="expiration">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-primary"> Expiration Date</th>
