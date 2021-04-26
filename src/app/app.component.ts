@@ -217,16 +217,17 @@ export class AppComponent implements OnInit {
     })
   }
 
-  createDateSwal() {
+  createDateSwal(linkId:string) {
     const dialogToOpen = this.dialog.open(ExpirationComponent, {
       width: '50%',
       height: '50%',
     });
 
     dialogToOpen.afterClosed().subscribe(date => {
-      console.log(date);
+      if (date && date != null) {
+        this.updateExpiration(linkId,date);
+      }
     })
-    return dialogToOpen;
 
   }
 
@@ -260,34 +261,26 @@ export class AppComponent implements OnInit {
   }
 
 
-  updateExpiration(linkId: string) {
-    return new Promise((resolve, reject) => {
-      console.log(linkId);
-/**
-      this.httpClient.put(environment.url + 'markplats/updatexpiration', { link: linkId })
+  updateExpiration(linkId: string,newDate:Date) {
+      this.displayToast('Updating Expiration Date',true,'info');
+      this.httpClient.put(environment.url + 'markplats/updatexpiration', { storeId: linkId , date:newDate})
         .subscribe((result: any) => {
+          Swal.close();
           console.log(result);
           if (result && result.status == 200) {
-            const indexToRemove = this.links.findIndex(link => link.link == linkId);
-
-            this.links.splice(indexToRemove, 1);
+            this.displayToast('Expiration Date Updated Succesfully',true,'success');
+            const indexToUpdate = this.links.findIndex(link => link._id == linkId);
+            this.links[indexToUpdate] = result.link;
             this.dataSource = new MatTableDataSource(this.links);
             this.dataSource.sort = this.sort;
-            this.dataSource.paginator = this.paginator; resolve({ status: true });
+            this.dataSource.paginator = this.paginator;
           }
           else {
-            resolve({ status: false });
-            Swal.showValidationMessage(
-              `Request failed: ${result.msg}`
-            )
+            this.displayToast('Something Went Wrong',true,'error');
           }
         }, err => {
-          resolve({ status: false });
-          Swal.showValidationMessage(
-            `Request failed: ${err.msg}`
-          )
-        })**/
-    })
+          this.displayToast('Something Went Wrong',true,'error');
+        })
   }
 
 }

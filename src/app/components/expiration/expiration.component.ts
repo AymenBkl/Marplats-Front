@@ -19,7 +19,7 @@ export class ExpirationComponent implements OnInit {
   public dialogRef: MatDialogRef<ExpirationComponent>) { }
 
   ngOnInit() {
-    this.now.setDate(this.now.getDate() + 1);
+    this.now.setDate(this.now.getDate());
     this.now = this.now.toISOString();
     this.range.patchValue(
       {
@@ -29,7 +29,7 @@ export class ExpirationComponent implements OnInit {
   }
 
   applyDate(){
-    this.dialogRef.close(this.range.value.start);
+    this.dialogRef.close(new Date(this.range.value.start).toISOString());
   }
 
 }

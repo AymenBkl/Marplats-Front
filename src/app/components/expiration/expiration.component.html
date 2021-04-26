@@ -1,14 +1,22 @@
-<mat-form-field [formGroup]='range'>
-  <input matInput [ngxMatDatetimePicker]="pickerMax" placeholder="Choose a max Date"
-      [min]="now" formControlName='start'>
-  <mat-datepicker-toggle matSuffix [for]="pickerMax"></mat-datepicker-toggle>
-  <ngx-mat-datetime-picker #pickerMax [showSpinners]="true" [showSeconds]="true"
-     [stepHour]="1" [stepMinute]="1" [stepSecond]="1"
-     [touchUi]="false"  [enableMeridian]="false">
-  </ngx-mat-datetime-picker>
-</mat-form-field>
+
+<div class="row content">
+  <div class="card box">
+    <div class="content-inputs">
+      <mat-label>Filters</mat-label>
+    </div>
+    <div class="content-inputs">
+      <mat-form-field color="accent" appearance="fill" [formGroup]='range'>
+        <mat-label>Inherited calendar color</mat-label>
+        <input matInput [matDatepicker]="picker1" formControlName='start' [min]='now' >
+        <mat-datepicker-toggle matSuffix [for]="picker1" ></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+    </div>
 
 
-<button mat-stroked-button color="accent" class="btn-block" (click)="applyDate()">
-  <mat-label > Apply Date </mat-label>
-</button>
+    <button mat-stroked-button color="accent" class="btn-block" (click)="applyDate()">
+      <mat-label > Apply Date </mat-label>
+    </button>
+    </div>
+
+</div>

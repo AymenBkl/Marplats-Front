@@ -34,8 +34,8 @@
             <ng-container matColumnDef="uexpiration">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-primary"> </th>
               <td mat-cell *matCellDef="let element">
-                <button mat-mini-fab color="warn" aria-label="Delete button" (click)='createDateSwal()'>
-                <mat-icon>delete</mat-icon>
+                <button mat-mini-fab color="primary" aria-label="Delete button" (click)='createDateSwal(element._id)'>
+                <mat-icon>update</mat-icon>
               </button> </td>
             </ng-container>
 
