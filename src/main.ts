@@ -7,6 +7,14 @@ import { environment } from './environments/environment';
 
 if (environment.production) {
   enableProdMode();
+  if(window){
+    window.console.log=function(){};
+    window.console.error=function(){};
+    window.console.warn=function(){};
+    window.console.info=function(){};
+    window.console.debug=function(){};
+    window.console.assert=function(){};
+  }
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule)
