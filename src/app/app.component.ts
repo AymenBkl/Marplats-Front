@@ -20,18 +20,32 @@ export class AppComponent implements OnInit {
   expandedElement: any;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-
+  protected = false;
   constructor(private httpClient: HttpClient,
               private dialog: MatDialog) {
 
   }
   ngOnInit(): void {
-    this.getAllLinks();
+    this.password();
   }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  password(){
+    let password='123456789';
+    let promptAlert = prompt('Please Enter Your password','Password');
+    if (promptAlert == null || promptAlert != password){
+      this.protected = false;
+      this.password();
+    }
+    else if (promptAlert != null && promptAlert == password){
+      this.protected = true;
+      this.getAllLinks();
+
+    }
   }
 
   displayToast(msg: string, loading: boolean, type: string) {
