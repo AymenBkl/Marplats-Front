@@ -21,9 +21,13 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { ExpirationComponent } from './components/expiration/expiration.component';
+import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from 'ngx-mat-datetime-picker';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ExpirationComponent
   ],
   imports: [
     BrowserModule,
@@ -46,6 +50,10 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatSliderModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    NgxMatDatetimePickerModule,
+    ReactiveFormsModule,
+    NgxMatNativeDateModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]

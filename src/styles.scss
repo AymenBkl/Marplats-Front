@@ -2,3 +2,7 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.swal2-overflow {
+  overflow-x: visible;
+  overflow-y: visible;
+}

@@ -1,0 +1,14 @@
+<mat-form-field [formGroup]='range'>
+  <input matInput [ngxMatDatetimePicker]="pickerMax" placeholder="Choose a max Date"
+      [min]="now" formControlName='start'>
+  <mat-datepicker-toggle matSuffix [for]="pickerMax"></mat-datepicker-toggle>
+  <ngx-mat-datetime-picker #pickerMax [showSpinners]="true" [showSeconds]="true"
+     [stepHour]="1" [stepMinute]="1" [stepSecond]="1"
+     [touchUi]="false"  [enableMeridian]="false">
+  </ngx-mat-datetime-picker>
+</mat-form-field>
+
+
+<button mat-stroked-button color="accent" class="btn-block" (click)="applyDate()">
+  <mat-label > Apply Date </mat-label>
+</button>

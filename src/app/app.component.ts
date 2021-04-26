@@ -5,6 +5,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { ExpirationComponent } from './components/expiration/expiration.component';
 
 @Component({
   selector: 'app-root',
@@ -13,13 +15,14 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class AppComponent implements OnInit {
   links: any[] = [];
-  displayedColumns: string[] = ['link', 'createdAt','expiration', 'delete'];
+  displayedColumns: string[] = ['link', 'createdAt', 'expiration', 'delete', 'uexpiration'];
   dataSource;
   expandedElement: any;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient,
+              private dialog: MatDialog) {
 
   }
   ngOnInit(): void {
@@ -160,8 +163,8 @@ export class AppComponent implements OnInit {
           if (result && result.status == 200) {
             this.links.push(result.link);
             this.dataSource = new MatTableDataSource(this.links);
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
             resolve({ status: true });
           }
           else {
@@ -214,6 +217,19 @@ export class AppComponent implements OnInit {
     })
   }
 
+  createDateSwal() {
+    const dialogToOpen = this.dialog.open(ExpirationComponent, {
+      width: '50%',
+      height: '50%',
+    });
+
+    dialogToOpen.afterClosed().subscribe(date => {
+      console.log(date);
+    })
+    return dialogToOpen;
+
+  }
+
   deleteLink(linkId: string) {
     return new Promise((resolve, reject) => {
 
@@ -240,6 +256,37 @@ export class AppComponent implements OnInit {
             `Request failed: ${err.msg}`
           )
         })
+    })
+  }
+
+
+  updateExpiration(linkId: string) {
+    return new Promise((resolve, reject) => {
+      console.log(linkId);
+/**
+      this.httpClient.put(environment.url + 'markplats/updatexpiration', { link: linkId })
+        .subscribe((result: any) => {
+          console.log(result);
+          if (result && result.status == 200) {
+            const indexToRemove = this.links.findIndex(link => link.link == linkId);
+
+            this.links.splice(indexToRemove, 1);
+            this.dataSource = new MatTableDataSource(this.links);
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator; resolve({ status: true });
+          }
+          else {
+            resolve({ status: false });
+            Swal.showValidationMessage(
+              `Request failed: ${result.msg}`
+            )
+          }
+        }, err => {
+          resolve({ status: false });
+          Swal.showValidationMessage(
+            `Request failed: ${err.msg}`
+          )
+        })**/
     })
   }
 
